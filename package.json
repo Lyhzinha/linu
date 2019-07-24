@@ -1,0 +1,25 @@
+{
+  "name": "linudex",
+  "version": "1.0.0",
+  "description": "Some beautiful app",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Lyhzinha/linu.git"
+  },
+  "author": "Liliana Faustino",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Lyhzinha/linu/issues"
+  },
+  "homepage": "https://github.com/Lyhzinha/linu#readme",
+  "devDependencies": {
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-plugin-import": "^2.10.0",
+    "eslint-plugin-node": "^6.0.1"
+  }
+
+}

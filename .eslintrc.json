@@ -1,0 +1,59 @@
+{
+    "env": {
+        "browser": true,
+        "node": true
+    }, 
+    "plugins": [
+        "node"
+    ],
+    "extends" : [
+        "airbnb-base",
+        "plugin:node/recommended"
+    ],
+    "rules" : {
+        "node/exports-style": ["error", "module.exports"],
+        "max-len": ["warn", 200],
+        "no-console": "off",
+        "no-useless-concat": "warn",
+        "no-unused-vars": "warn",
+        "func-names": ["error", "never"],
+        "comma-dangle": ["error", "never"],
+        "prefer-template": "off",
+        "brace-style": ["warn", "stroustrup"],
+        "prefer-destructuring": "off",
+        "wrap-iife": "off",
+        "no-underscore-dangle": "off",
+        "arrow-body-style": "off",
+        "no-lonely-if": "off",
+        "dot-notation": "off",
+        "no-use-before-define": ["error", { "functions": false}],
+        "no-param-reassign": ["error", { "props": false }],
+        "object-curly-newline": "off",
+        "indent" : [
+            "error",
+            4
+        ],
+        "linebreak-style" : "off",
+        "quotes" : [
+            "error",
+            "single"
+        ],
+        "semi" : [
+            "error",
+            "always"
+        ]
+    },
+    "globals": {
+        "angular": true,
+        "document": true,
+        "window": true,
+        "google": true,
+        "async": true,
+        "moment": true,
+        "Stripe": true,
+        "Chart": true,
+        "JSZip": true,
+        "JSZipUtils": true,
+        "saveAs": true
+    } 
+}
