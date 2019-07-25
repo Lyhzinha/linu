@@ -1,8 +1,0 @@
-const express = require('express');
-
-const router = express.Router();
-
-const user
-
-
-const users = require('../controllers/userController');
