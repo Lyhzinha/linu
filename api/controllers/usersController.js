@@ -3,24 +3,9 @@ const bcrypt = require('bcrypt');
 
 const jwt = require('jsonwebtoken');
 
+function create(req, res) {
 
-function create(req, res, next) {
-    userModel.create({
-        name: req.body.name,
-        email: req.body.email,
-        password: req.body.password }, (err) => {
-        if (err) {
-            next(err);
-        }
-        else {
-            res.json({
-                status: 'success',
-                message: 'User added successfully!!!',
-                data: null });
-        }
-    });
 }
-
 function authenticate(req, res, next) {
     userModel.findOne({ email: req.body.email }, (err, userInfo) => {
         if (err) {
