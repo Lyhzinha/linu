@@ -1,8 +1,11 @@
 const express = require('express');
 
 const app = express();
-const port = process.env.PORT || 3000;
 
-app.listen(port);
+app.get('/', (req, res) => {
+    res.json('Build REST API with node.js');
+});
 
-console.log('Linudex server started on: ' + port);
+app.listen(80, () => {
+    console.log('Node server listening on port 80');
+});
