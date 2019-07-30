@@ -16,16 +16,16 @@ module.exports = {
                 const user = new User({ name, password, email });
 
                 // TODO: hash the password (instead on a model)
-                // eslint-disable-next-line no-shadow
-                user.save((err, user) => {
+
+                user.save((errSavingUser, userSaved) => {
                     if (!err) {
                         result.status = status;
-                        result.result = user;
+                        result.result = userSaved;
                     }
                     else {
                         status = 500;
                         result.status = status;
-                        result.error = err;
+                        result.error = errSavingUser;
                     }
                     res.status(status).send(result);
                 });
