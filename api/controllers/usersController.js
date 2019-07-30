@@ -1,39 +1,34 @@
 const mongoose = require('mongoose');
 const User = require('../models/usersModel');
-const expressValidator = require('express-validator');
 
 const connUri = process.env.MONGODB_URI;
 
-module.exports = {
-    add: (req, res) => {
-        mongoose.connect(connUri, { useNewUrlParser: true }, (err, next) => {
-            const result = {};
-            let status = 201;
-            if (!err) {
-                req.checkBody({
-                    name: {
-                        notEmpty: true,
-                        errorMessage: 'Invalid Name'
-                    },
-                    password: {
-                        notEmpty: true,
-                        errorMessage: 'Invalid Password'
-                    },
-                    email: {
-                        notEmpty: true,
-                        isEmail: false,
-                        errorMessage: 'Invalid Name'
-                    }
-                });
 
-                const validationErrors = req.validationErrors;
+function add(req, res) {
+    mongoose.connect(connUri, { useNewUrlParser: true }, (err) => {
+        const result = {};
+        let status = 201;
+        if (!err) {
+            req.checkBody({
+                name: {
+                    notEmpty: true,
+                    errorMessage: 'Invalid Name'
+                },
+                password: {
+                    notEmpty: true,
+                    errorMessage: 'Invalid Password'
+                },
+                email: {
+                    notEmpty: true,
+                    isEmail: false,
+                    errorMessage: 'Invalid Name'
+                }
+            });
 
-                if (validationErrors) {
+            req.getValidationResult().then((resultValidation) => {
+                if (!resultValidation.isEmpty()) {
                     status = 400;
-                    result.status = status;
-                    result.error = validationErrors;
-                    res.status(status).send(result);
-                    next();
+                    res.status(status).send('Invalid Fields');
                 }
                 else {
                     const name = req.body.name;
@@ -44,27 +39,31 @@ module.exports = {
 
                     // TODO: hash the password (instead on a model)
 
-                    user.save((errSavingUser, userSaved) => {
-                        if (!errSavingUser) {
+                    user.save((errSaving, userSaved) => {
+                        if (!err) {
                             result.status = status;
                             result.result = userSaved;
                         }
                         else {
                             status = 500;
                             result.status = status;
-                            result.error = errSavingUser;
+                            result.error = errSaving;
                         }
                         res.status(status).send(result);
                     });
                 }
-            }
+            });
+        }
+        else {
+            status = 500;
+            result.status = status;
+            result.error = err;
+            res.status(status).send(result);
+        }
+    });
+}
 
-            else {
-                status = 500;
-                result.status = status;
-                result.error = err;
-                res.status(status).send(result);
-            }
-        });
-    }
+
+module.exports = {
+    add
 };

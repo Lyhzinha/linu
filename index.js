@@ -4,9 +4,10 @@ const express = require('express');
 const logger = require('morgan');
 const bodyParser = require('body-parser');
 
+
 const app = express();
 const router = express.Router();
-
+const expressValidator = require('express-validator');
 const routes = require('./api/routes/indexRoutes');
 
 const environment = process.env.NODE_ENV;
@@ -16,6 +17,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
     extended: true
 }));
+
+app.use(expressValidator());
 
 if (environment !== 'production') {
     app.use(logger('dev'));
