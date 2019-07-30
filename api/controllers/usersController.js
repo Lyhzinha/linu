@@ -47,7 +47,18 @@ function add(req, res) {
     });
 }
 
+function getAllUsers(req, res) {
+    User.find({}, (error, users) => {
+        if (error) {
+            console.log('Get all users failed', error);
+            return;
+        }
+        res.send(users);
+    });
+}
+
 
 module.exports = {
-    add
+    add,
+    getAllUsers
 };
