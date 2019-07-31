@@ -1,5 +1,6 @@
 const User = require('../models/usersModel');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 function add(req, res) {
     req.checkBody({
@@ -86,6 +87,13 @@ function login(req, res) {
             const password = req.body.password;
             bcrypt.compare(password, user.password).then((match) => {
                 if (match) {
+                    // Token creation
+                    const payload = { user: user.email };
+                    const options = { expiresIn: '1d' };
+                    const secret = process.env.JWT_SECRET;
+                    const token = jwt.sign(payload, secret, options);
+
+                    result.token = token;
                     result.status = 200; // HTTP 200 Ok
                     result.result = user;
                 }
