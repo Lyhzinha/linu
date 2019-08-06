@@ -2,12 +2,9 @@ const jwt = require('jsonwebtoken');
 
 function validateToken(req, res, next) {
     const authorizationHeader = req.headers.authorization;
-    let result;
+
     if (!authorizationHeader) {
-        result = {
-            error: 'Authentication error. Token required.',
-            status: 401
-        };
+        const result = { error: 'Authentication error. Token required.' };
         res.status(401).send(result);
     }
 
@@ -15,16 +12,13 @@ function validateToken(req, res, next) {
     const options = { expiresIn: '1d' };
 
     try {
-        result = jwt.verify(token, process.env.JWT_SECRET, options); // verify if token hasn't expired
+        const result = jwt.verify(token, process.env.JWT_SECRET, options); // verify if token hasn't expired
         req.decoded = result;
         next();
     }
     catch (err) {
-        result = {
-            error: 'Error on token verification' + err,
-            status: 500
-        };
-        res.status(result.status).send(result);
+        const result = { error: 'Error on token verification' + err };
+        res.status(500).send(result);
     }
 }
 
