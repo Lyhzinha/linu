@@ -20,7 +20,11 @@ function validateToken(req, res, next) {
         next();
     }
     catch (err) {
-        throw new Error(err);
+        result = {
+            error: 'Error on token verification' + err,
+            status: 500
+        };
+        res.status(result.status).send(result);
     }
 }
 
