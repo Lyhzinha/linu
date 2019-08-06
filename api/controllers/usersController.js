@@ -1,5 +1,6 @@
 const User = require('../models/usersModel');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 function add(req, res) {
     req.checkBody({
@@ -15,6 +16,10 @@ function add(req, res) {
             notEmpty: true,
             isEmail: false,
             errorMessage: 'Invalid Email'
+        },
+        role: {
+            notEmpty: true,
+            errorMessage: 'Choose an option'
         }
     });
 
@@ -28,10 +33,9 @@ function add(req, res) {
         const name = req.body.name;
         const password = req.body.password;
         const email = req.body.email;
+        const role = req.body.role;
 
-        const user = new User({ name, password, email });
-
-        // TODO: hash the password (instead on a model)
+        const user = new User({ name, password, email, role });
 
         user.save((errSaving, userSaved) => {
             const result = {};
@@ -86,6 +90,12 @@ function login(req, res) {
             const password = req.body.password;
             bcrypt.compare(password, user.password).then((match) => {
                 if (match) {
+                    const payload = { user: user.email, role: user.role };
+                    const options = { expiresIn: '1d' };
+                    const secret = process.env.JWT_SECRET;
+                    const token = jwt.sign(payload, secret, options);
+
+                    result.token = token;
                     result.status = 200; // HTTP 200 Ok
                     result.result = user;
                 }
@@ -105,13 +115,20 @@ function login(req, res) {
 
 
 function getAllUsers(req, res) {
-    User.find({}, (error, users) => {
-        if (error) {
-            console.log('Get all users failed', error);
-            return;
-        }
-        res.send(users);
-    });
+    const payload = req.decoded;
+    console.log(payload);
+
+    if (payload && payload.role === 'admin') {
+        User.find({}, (error, users) => {
+            if (error) {
+                res.status(500).send('Operation failed'); // HTTP 500 Server internal error
+            }
+            res.status(200).send(users);
+        });
+    }
+    else {
+        res.status(400).send('You don\'t have permissions.');
+    }
 }
 
 
